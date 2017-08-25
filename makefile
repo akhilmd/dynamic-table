@@ -8,7 +8,7 @@ MODULE = dynamic_table
 
 CC = gcc
 MK = @mkdir -p $(@D)
-CFLAGS = -g -fpic -I/usr/include/python3.5m/
+CFLAGS = -g -fpic -I/usr/include/python3.5m/ -lm
 
 all:	$(GEN)/$(MODULE).py $(GEN)/_$(MODULE).so
 
