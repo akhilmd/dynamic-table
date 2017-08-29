@@ -17,6 +17,8 @@ typedef struct DynamicTable {
 } DynamicTable;
 
 DynamicTable* new(int, float, float, bool);
+DynamicTable* destroy(DynamicTable*);
 double push(DynamicTable*, int);
+double pop(DynamicTable*);
 int display(DynamicTable*);
 
