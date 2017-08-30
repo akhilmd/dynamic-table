@@ -41,7 +41,7 @@ double push(DynamicTable* dt, int new_val) {
     // ceil is used since inc_factor is float
     int new_size = (int) ceil(dt->max_size * dt->inc_factor);
 
-    printf("upsizing, [%d] [%d]\n", dt->max_size, new_size);
+    // printf("upsizing, [%d] [%d]\n", dt->max_size, new_size);
 
     if (dt->use_malloc) {
       // allocate a new block of memory with new_size
@@ -95,7 +95,7 @@ double pop (DynamicTable* dt) {
 
     // If new_size is small enough, resize
     if (new_size <= dt->max_size/dt->dec_factor) {
-      printf("downsizing, [%d]->[%d]\n", dt->max_size, new_size);
+      // printf("downsizing, [%d]->[%d]\n", dt->max_size, new_size);
       dt->data = realloc(dt->data, new_size * sizeof(int));
       dt->max_size = new_size;
     }
