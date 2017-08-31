@@ -1,5 +1,6 @@
 #include "../include/timer.h"
 
+// Utility for proper conversions.
 double time_elapsed (TimeSpec* start, TimeSpec* end) {
   long long sms_s = ((long long) start->tv_sec * 1000000000);
   long long sms_n = (long long) (start->tv_nsec);
@@ -11,6 +12,7 @@ double time_elapsed (TimeSpec* start, TimeSpec* end) {
   return te > 0.0 ? te : 0.0;
 }
 
+// Get Current time and store in ts.
 int now(TimeSpec* ts) {
   clock_gettime(CLOCK_REALTIME, ts);
   return 0;

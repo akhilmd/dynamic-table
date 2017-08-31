@@ -2,3 +2,5 @@ gen
 *.o
 *.so
 tests/dynamic_table.py
+*.swp
+tests/__pycache__/*

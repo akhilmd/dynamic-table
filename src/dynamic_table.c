@@ -1,6 +1,7 @@
 #include "../include/dynamic_table.h"
 #include "../include/timer.h"
 
+// Initialize new instance
 DynamicTable* new(int max_size, float inc_factor, float dec_factor, bool use_malloc) {
   DynamicTable* new_dt = malloc(sizeof(DynamicTable));
 
@@ -23,6 +24,7 @@ DynamicTable* new(int max_size, float inc_factor, float dec_factor, bool use_mal
   return new_dt;
 }
 
+// Free allocated data 
 DynamicTable* destroy (DynamicTable* dt) {
   free(dt->data);
   free(dt);
@@ -33,7 +35,9 @@ double push(DynamicTable* dt, int new_val) {
   TimeSpec* start = malloc(sizeof(TimeSpec));
   TimeSpec* end = malloc(sizeof(TimeSpec));
 
+  // Capture current time
   now(start);
+
   if (dt->size >= dt->max_size) {
     // check the use_malloc bool and increase space accordingly
 
@@ -61,7 +65,11 @@ double push(DynamicTable* dt, int new_val) {
       // update pointer with new, bigger data block
       dt->data = new_data;
     } else {
-      // do the realloc stuff
+      // Realloc handles increasing memory in an efficient way.
+      // If there is enough space after the current allocated memory, 
+      // it will not copy. This will lead to inconsistent numbers
+      // when analyzing performance, but must be used in real world 
+      // application of this data structure.
       dt->data = realloc(dt->data, new_size * sizeof(int));
     }
 
@@ -72,12 +80,16 @@ double push(DynamicTable* dt, int new_val) {
   // data maight have been resized, but definitely has some extra space.
   dt->data[dt->size] = new_val;
   (dt->size)++;
+
+  // Capture time after operation.
   now(end);
 
   double te = time_elapsed(start, end);
 
   free(start);
   free(end);
+
+  // Return time for this operation.
   return te;
 }
 
@@ -95,11 +107,14 @@ double pop (DynamicTable* dt) {
 
     // If new_size is small enough, resize
     if (new_size <= dt->max_size/dt->dec_factor) {
-      // printf("downsizing, [%d]->[%d]\n", dt->max_size, new_size);
+      // malloc should not be used here since it will be very bad
+      // to copy even when we have enough new space. This is only
+      // valid during deletion,
       dt->data = realloc(dt->data, new_size * sizeof(int));
       dt->max_size = new_size;
     }
 
+    // Just decrent size by 1 to 'remove' last element
     --(dt->size);
   }
 
@@ -109,9 +124,12 @@ double pop (DynamicTable* dt) {
 
   free(start);
   free(end);
+
+  // Return time for operation
   return te;
 }
 
+// Utility function to print the data for debugging.
 int display(DynamicTable* dt) {
   int i = 0;
 
